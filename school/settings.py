@@ -137,7 +137,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # This will be your static file collection directory
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This will be your static file collection directory
 
 # Login url
 
