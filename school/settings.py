@@ -26,7 +26,7 @@ SECRET_KEY = '30!c%fl=3ka7+&g7p=ye=6&(q7y0d)f+m@)@cwrspal@wt1#v3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['sch-fees-mgt-sys.onrender.com']
 
 
 # Application definition
