@@ -1,3 +1,4 @@
+# payment/forms.py
 from datetime import datetime
 
 from django import forms
@@ -6,9 +7,18 @@ from enrollment.models import Enroll
 from payment.models import Payment
 
 
+from payment.models import Payment
+
+
+class CustomEnrollModelChoiceField(forms.ModelChoiceField):
+    def label_from_instance(self, obj):
+        # This method returns the formatted string for each dropdown option
+        return f"{obj.student_id.student_number} - {obj.student_id} - {obj.course_id.level}"
+
+
 class CreatePaymentForm(forms.ModelForm):
-    enroll_id = forms.ModelChoiceField(
-        label='Enrollment',
+    enroll_id = CustomEnrollModelChoiceField(
+        label='Student',
         queryset=Enroll.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control'}),
     )
@@ -59,3 +69,4 @@ class DateSelectionForm(forms.ModelForm):
     class Meta:
         model = Payment
         fields = ['month', 'year']
+
