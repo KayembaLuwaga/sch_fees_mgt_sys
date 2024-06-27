@@ -1,23 +1,35 @@
-// main.js file
+// static/js/main.js file
 const tbody = $('#fee-table tbody');
 
 function insert_fee(_this) {
-    let desc = $(_this).parent().find('input[name="fee_desc"]').val();
-    let amount = $(_this).parent().find('input[name="amount"]').val();
-    let descs = tbody.find('td#desc').map(function() {
-        return $(this).text().trim();
-    }).get();
+    // Fetch the parent row where the Add button is located
+    let parentRow = $(_this).closest('div'); // Adjust this selector based on your actual HTML structure
 
-    if (desc === ""){
+    // Select input fields for fee description and amount
+    let desc = parentRow.find('input[name="fee_desc"]').val();
+    let amount = parentRow.find('input[name="amount"]').val();
+
+    // Check if these inputs are empty
+    if (desc === "") {
         alert("Please enter a description");
         return;
     }
+    if (amount === "" || isNaN(amount) || parseFloat(amount) <= 0) {
+        alert("Please enter a valid amount");
+        return;
+    }
+
+    // Check for duplicate fee descriptions
+    let descs = tbody.find('td#desc').map(function() {
+        return $(this).text().trim();
+    }).get();
 
     if (descs.includes(desc)) {
         alert("Duplicate fee description");
         return;
     }
 
+    // Append the fee detail to the table
     let elem = `
         <tr>
             <input type="hidden" name="fee_desc[]" value="${desc}">
@@ -33,7 +45,13 @@ function insert_fee(_this) {
         </tr>
     `;
     tbody.append(elem);
+
+    // Recalculate the total amount
     calculate_total();
+
+    // Clear input fields after adding the fee
+    parentRow.find('input[name="fee_desc"]').val('');
+    parentRow.find('input[name="amount"]').val('');
 }
 
 function remove_fee(_this) {
@@ -96,3 +114,78 @@ function printInvoice() {
     a.document.close();
     a.print();
 }
+
+function validateAndSubmitForm() {
+    const feeRows = $('#fee-table tbody tr').length;
+    if (feeRows === 0) {
+        alert("Please add at least one fee before submitting.");
+    } else {
+        document.getElementById('student-form').submit();
+    }
+}
+
+function updateTotalFee(courseSelectElement) {
+    var courseId = $(courseSelectElement).val();
+    if (courseId) {
+        $.ajax({
+            url: '/course/get_total_amount/',  // Your endpoint to get the total_amount for a course
+            type: 'GET',
+            data: {'course_id': courseId},
+            success: function(data) {
+                $('#id_total_fee').val(data.total_amount);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching total amount: ", status, error);
+            }
+        });
+    } else {
+        $('#id_total_fee').val('');  // Clear if no course is selected
+    }
+}
+
+// Document ready function to attach event handlers and initialize
+$(document).ready(function() {
+    // Attach the event handler to the course_id field
+    $('#id_course_id').change(function() {
+        updateTotalFee(this);
+    });
+
+    // Update student_id based on selected student_number
+    $('#id_student_number').change(function() {
+        var studentId = $(this).val();
+        $('#id_student_id').val(studentId);
+    });
+});
+
+$(document).ready(function() {
+    // Function to update the total_fee based on selected course_id
+    window.updateTotalFee = function(courseSelectElement) {
+        var courseId = $(courseSelectElement).val();
+        if (courseId) {
+            $.ajax({
+                url: '/course/get_total_amount/',  // Your endpoint to get the total_amount for a course
+                type: 'GET',
+                data: {'course_id': courseId},
+                success: function(data) {
+                    $('#id_total_fee').val(data.total_amount);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching total amount: ", status, error);
+                }
+            });
+        } else {
+            $('#id_total_fee').val('');  // Clear if no course is selected
+        }
+    };
+
+    // Update student_id based on selected student_number
+    $('#id_student_number').change(function() {
+        var studentId = $(this).val();
+        $('#id_student_id').val(studentId);
+    });
+
+    // Attach the event handler to the course_id field
+    $('#id_course_id').change(function() {
+        updateTotalFee(this);
+    });
+});
