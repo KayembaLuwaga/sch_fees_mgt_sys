@@ -1,3 +1,4 @@
+# enrollment/models.py
 import decimal
 
 from django.db import models

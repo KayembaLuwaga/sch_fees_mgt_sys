@@ -1,4 +1,3 @@
-<!--create.html-->
 {% extends 'master.html' %}
 {% load static %}
 {% block style %}
@@ -74,28 +73,37 @@
                                         {{ non_field_error }}
                                     </div>
                                 {% endfor %}
-<!--                                {% for fields in fee %}-->
-<!--                                    <div class="form-group">-->
-<!--                                        <label for="{{ fields.id_for_label }}" class="text-capitalize">{{ fields.label }}</label>-->
-<!--                                        {{ fields }}-->
-<!--                                        {% for error in fields.errors %}-->
-<!--                                            <div class="invalid-feedback d-block">-->
-<!--                                                {{ error }}-->
-<!--                                            </div>-->
-<!--                                        {% endfor %}-->
-<!--                                    </div>-->
-<!--                                {% endfor %}-->
+                                {% for fields in fee %}
+                                    <div class="form-group">
+                                        <label for="{{ fields.id_for_label }}" class="text-capitalize">{{ fields.label }}</label>
+                                        {{ fields }}
+                                        {% for error in fields.errors %}
+                                            <div class="invalid-feedback d-block">
+                                                {{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
 
-<!--                                <a href="javascript:void(0)" onclick="insert_fee($(this))" class="btn btn-primary btn-icon-split btn-sm mb-4">-->
-<!--                                    <span class="icon text-white-50">-->
-<!--                                        <i class="fas fa-plus-circle"></i>-->
-<!--                                    </span>-->
-<!--                                    <span class="text">Add</span>-->
-<!--                                </a>-->
+<!--                                <div class="form-group">-->
+<!--                                    <label for="fee_desc" class="text-capitalize">Description</label>-->
+<!--                                    <input type="text" name="fee_desc" class="form-control" id="fee_desc">-->
+<!--                                </div>-->
+<!--                                <div class="form-group">-->
+<!--                                    <label for="amount" class="text-capitalize">Amount</label>-->
+<!--                                    <input type="text" name="amount" class="form-control" id="amount">-->
+<!--                                </div>-->
+
+                                <a href="javascript:void(0)" onclick="insert_fee($(this))" class="btn btn-primary btn-icon-split btn-sm mb-4">
+                                    <span class="icon text-white-50">
+                                        <i class="fas fa-plus-circle"></i>
+                                    </span>
+                                    <span class="text">Add</span>
+                                </a>
                                 <table class="table" id="fee-table">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th>Fee/Charge</th>
+                                            <th>Description</th>
                                             <th>Amount</th>
                                         </tr>
                                     </thead>
@@ -103,8 +111,8 @@
                                     </tbody>
                                     <tfoot class="text-uppercase">
                                         <tr class="text-center">
-                                            <td>Total Amount</td>
-                                            <td><input type="text" name="total_amount" id="id_total_amount"></td>
+                                            <td>Total</td>
+                                            <td>$0</td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -132,33 +140,4 @@ function checkFeesAndSubmit() {
         document.getElementById('student-form').submit();
     }
 }
-</script>
-
-<!-- Your JavaScript code -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Function to calculate total amount
-        function calculate_total() {
-            let total = 0;
-            $('#fee-table tbody tr').each(function() {
-                let amount = parseFloat($(this).find('input[name="amount[]"]').val()) || 0;
-                total += amount;
-            });
-            $('#id_total_amount').val(total.toFixed(2)); // Set total amount in hidden input
-        }
-
-        // Function to handle form submission
-        function validateAndSubmitForm() {
-            calculate_total(); // Calculate total before submitting
-            document.getElementById('student-form').submit(); // Submit the form
-        }
-
-        // Example: Call calculate_total() on amount change (adjust as per your needs)
-        $('#fee-table tbody').on('input', 'input[name="amount[]"]', function() {
-            calculate_total();
-        });
-
-        // Add more logic here as needed
-    });
 </script>

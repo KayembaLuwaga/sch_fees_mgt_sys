@@ -15,7 +15,7 @@
             <span class="icon text-white-50">
                 <i class="fas fa-plus-circle"></i>
             </span>
-            <span class="text">Create</span>
+            <span class="text">+ New Fees Payment Record</span>
         </a>
     </div>
     {% include "messages.html" %}
@@ -36,9 +36,9 @@
                             <tr>
                                 <th>#</th>
                                 <th>Date</th>
-                                <th>S.ID</th>
-                                <th>E.ID</th>
+                                <th>Student Number</th>
                                 <th>Name</th>
+                                <th>Fees Structure Name - Level</th>
                                 <th>Paid</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -47,9 +47,9 @@
                             <tr>
                                 <th>#</th>
                                 <th>Date</th>
-                                <th>S.ID</th>
-                                <th>E.ID</th>
+                                <th>Student Number</th>
                                 <th>Name</th>
+                                <th>Fees Structure Name - Level</th>
                                 <th>Paid</th>
                                 <th class="text-center">Action</th>
                             </tr>
@@ -59,10 +59,10 @@
                                 <tr>
                                     <td>{{ payment.id }}</td>
                                     <td>{{ payment.date_created }}</td>
-                                    <td>{{ payment.enroll_id.student_id_id }}</td>
-                                    <td>{{ payment.enroll_id_id }}</td>
+                                    <td>{{ payment.enroll_id.student_id.student_number }}</td>
                                     <td>{{ payment.enroll_id.student_id }}</td>
-                                    <td>${{ payment.amount }}</td>
+                                    <td>{{ payment.course_id.name }} - {{ payment.course_id.level }}</td>
+                                    <td>UGX {{ payment.amount }}</td>
                                     <td class="text-center align-middle">
                                         <a href="{% url 'payment.invoice' pid=payment.id %}" class="d-none d-sm-inline-block btn btn-sm btn-success">
                                             <i class="fas fa-file-invoice fa-fw fa-sm text-white-50"></i>

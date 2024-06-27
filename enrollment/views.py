@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.http import JsonResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse
 
 from course.models import Course
 from enrollment.forms import CreateEnrollForm
@@ -73,3 +74,36 @@ def delete(request, eid):
     else:
         messages.error(request, 'Invalid request')
         return redirect('enroll.index')
+
+def get_total_amount(request):
+    course_id = request.GET.get('course_id')
+    if course_id:
+        try:
+            course = Course.objects.get(id=course_id)
+            return JsonResponse({'total_amount': course.total_amount})
+        except Course.DoesNotExist:
+            return JsonResponse({'total_amount': 0}, status=404)
+    return JsonResponse({'total_amount': 0}, status=400)
+
+def create_enroll(request):
+    if request.method == 'POST':
+        form = CreateEnrollForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('enroll.index')  # Adjust the redirect as necessary
+    else:
+        form = CreateEnrollForm()
+
+    return render(request, 'enrollment/enroll_form.html', {'form': form})
+
+def update_enroll(request, pk):
+    enroll = get_object_or_404(Enroll, pk=pk)
+    if request.method == 'POST':
+        form = CreateEnrollForm(request.POST, instance=enroll)
+        if form.is_valid():
+            form.save()
+            return redirect('enroll.index')  # Adjust the redirect as necessary
+    else:
+        form = CreateEnrollForm(instance=enroll)
+
+    return render(request, 'enrollment/enroll_form.html', {'form': form})

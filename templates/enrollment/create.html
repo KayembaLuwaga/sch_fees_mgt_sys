@@ -1,7 +1,12 @@
 {% extends 'master.html' %}
 {% load static %}
-
 {% block style %}
+    <style>
+        label[for="id_total_fee"] {
+            display: none;
+        }
+    </style>
+
     <link href="{% static 'vendor/select2/select2.min.css' %}" rel="stylesheet" />
     <link rel="stylesheet" href="{% static 'vendor/select2/select2-bootstrap4.min.css' %}">
 {% endblock %}
@@ -16,11 +21,11 @@
             <span class="text">Cancel</span>
         </a>
 
-        <a href="javascript:void(0)" onclick="$('#enroll-form').submit()" class="btn btn-primary btn-icon-split btn-sm">
+        <a href="javascript:void(0)" onclick="document.getElementById('enroll-form').submit()" class="btn btn-primary btn-icon-split btn-sm">
             <span class="icon text-white-50">
                 <i class="fas fa-save"></i>
             </span>
-            <span class="text">Insert</span>
+            <span class="text">+ Enroll Student</span>
         </a>
     </div>
 {% endblock %}
@@ -33,7 +38,7 @@
                 <!-- Card Header - Dropdown -->
                 <div
                     class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary text-uppercase">Create Record</h6>
+                    <h6 class="m-0 font-weight-bold text-primary text-uppercase">Enroll New Student</h6>
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
@@ -65,7 +70,7 @@
 {% block script %}
     <script src="{% static 'vendor/select2/select2.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
-    <script>
+    <script style="text/Javascript" language="JavaScript">
         $(function () {
             $('select').each(function () {
                 $(this).select2({
@@ -79,5 +84,72 @@
                 get_total_amount("{% url 'enroll.get_course_total_amount' %}", course_id);
             });
         });
+
+        $(document).ready(function() {
+    // Function to update the total_fee based on selected course_id
+    window.updateTotalFee = function(courseSelectElement) {
+        var courseId = $(courseSelectElement).val();
+        if (courseId) {
+            $.ajax({
+                url: '/course/get_total_amount/',  // Your endpoint to get the total_amount for a course
+                type: 'GET',
+                data: {'course_id': courseId},
+                success: function(data) {
+                    $('#id_total_fee').val(data.total_amount);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error fetching total amount: ", status, error);
+                }
+            });
+        } else {
+            $('#id_total_fee').val('');  // Clear if no course is selected
+        }
+    };
+
+    // Update student_id based on selected student_number
+    $('#id_student_number').change(function() {
+        var studentId = $(this).val();
+        $('#id_student_id').val(studentId);
+    });
+
+    // Attach the event handler to the course_id field
+    $('#id_course_id').change(function() {
+        updateTotalFee(this);
+    });
+});
+
+function updateTotalFee(courseSelectElement) {
+    var courseId = $(courseSelectElement).val();
+    if (courseId) {
+        $.ajax({
+            url: '/course/get_total_amount/',  // Your endpoint to get the total_amount for a course
+            type: 'GET',
+            data: {'course_id': courseId},
+            success: function(data) {
+                $('#id_total_fee').val(data.total_amount);
+            },
+            error: function(xhr, status, error) {
+                console.error("Error fetching total amount: ", status, error);
+            }
+        });
+    } else {
+        $('#id_total_fee').val('');  // Clear if no course is selected
+    }
+}
+
+// Document ready function to attach event handlers and initialize
+$(document).ready(function() {
+    // Attach the event handler to the course_id field
+    $('#id_course_id').change(function() {
+        updateTotalFee(this);
+    });
+
+    // Update student_id based on selected student_number
+    $('#id_student_number').change(function() {
+        var studentId = $(this).val();
+        $('#id_student_id').val(studentId);
+    });
+});
+
     </script>
 {% endblock %}

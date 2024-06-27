@@ -36,7 +36,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
-                                <th>Information</th>
+                                <th>Details</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </thead>
@@ -44,7 +44,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Name</th>
-                                <th>Information</th>
+                                <th>Details</th>
                                 <th class="text-center">Action</th>
                             </tr>
                         </tfoot>
@@ -54,9 +54,9 @@
                                     <td>{{ student.id }}</td>
                                     <td>{{ student.name }}</td>
                                     <td>
-                                        Email: {{ student.email }}<br>
-                                        Contact #: {{ student.contact }}<br>
-                                        Address: {{ student.address }}
+                                        Student Number: {{ student.student_number }}<br>
+                                        Class: {{ student.std_class }}<br>
+                                        Stream: {{ student.stream }}
                                     </td>
                                     <td class="text-center align-middle">
                                         <a href="{% url 'student.edit' sid=student.id %}" class="d-none d-sm-inline-block btn btn-sm btn-primary">

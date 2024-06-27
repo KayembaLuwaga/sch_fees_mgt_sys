@@ -82,6 +82,12 @@
                     <span>Fees Structure</span></a>
             </li>
 
+            <li class="nav-item {% if request.get_full_path == "/enrollment/" %}active{% endif %}">
+                <a class="nav-link" href="{% url 'enroll.index' %}">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Termly Enrollment</span></a>
+            </li>
+
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -408,6 +414,8 @@
 
     <!-- Custom scripts for all pages-->
     <script src="{% static "js/sb-admin-2.min.js" %}"></script>
+
+    <script src="{% static 'static/js/main.js' %}"></script>
 
     {% block script %} {% endblock %}
 

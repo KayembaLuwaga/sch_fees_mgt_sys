@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
 import os
 from pathlib import Path
 
@@ -26,7 +25,7 @@ SECRET_KEY = '30!c%fl=3ka7+&g7p=ye=6&(q7y0d)f+m@)@cwrspal@wt1#v3'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['sch-fees-mgt-sys.onrender.com']
+ALLOWED_HOSTS = ['sch-fees-mgt-sys.onrender.com', '127.0.0.1']
 
 
 # Application definition
@@ -43,6 +42,7 @@ INSTALLED_APPS = [
     'course',
     'payment',
     'account',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -54,11 +54,22 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',  # Add WhiteNoise middleware
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 ROOT_URLCONF = 'school.urls'
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8000',
+    'http://127.0.0.1:8000',
+    # Add your specific domain here if in production
+    'https://sch-fees-mgt-sys.onrender.com',
+]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 TEMPLATES = [
     {
@@ -124,7 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Phnom_Penh'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -139,8 +150,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
+# Static files (CSS, JavaScript, Images)
 # STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # This will be your static file collection directory
+
 
 # Login url
 
